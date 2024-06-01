@@ -1,6 +1,4 @@
-
-//Functions
-
+//FUNCTIONS
 
 // start preset
 function presetMode() {
@@ -8,9 +6,26 @@ function presetMode() {
     PlanetX_AILens.switchfunc(PlanetX_AILens.FuncList.Ball)
 }
 
-// checking blackLine
-function blackLine() {
+// checking blackLine and if it is ball
+let firstObserve: boolean = false
 
+function blackLine(): void {
+    while (!firstObserve) {
+        toObserve()
+        if (toObserve()) {
+            firstObserve = true
+            TPBot.stopCar()
+        }
+
+        if (TPBot.trackLine(TPBot.TrackingState.L_R_line) && !firstObserve) {
+            TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 60)
+        }
+
+        if (!TPBot.trackLine(TPBot.TrackingState.L_R_line) && !firstObserve) {
+            TPBot.setWheels(80, -80)
+            basic.pause(400)
+        }
+    }
 }
 
 // sonar sensor
@@ -18,11 +33,9 @@ function sonar() {
 
 }
 
-
-// AI camera
+// AI CAMERA
 
 // find balls - colors
-
 function findBalls(): string {
     let statusBall: string
     PlanetX_AILens.cameraImage()
@@ -33,79 +46,25 @@ function findBalls(): string {
 }
 
 //to observe ball
-
 function toObserve(): boolean {
     PlanetX_AILens.cameraImage()
-    if (PlanetX_AILens.checkBall()) return true
-    else return false
+    return PlanetX_AILens.checkBall()
 }
 
 //find cards
-
 function findCards(): string {
     let statusCard: string
     if (PlanetX_AILens.colorCheck(PlanetX_AILens.ColorLs.blue)) statusCard = "B"
     else if (PlanetX_AILens.colorCheck(PlanetX_AILens.ColorLs.red)) statusCard = "R"
     else statusCard = "N"
-    return statusCard                                                                                                                                                                                                                                                                                
+    return statusCard
 }
 
 //MAIN FUNCTIONS
 
-//catching ball
-
-let firstObserve: boolean = false
-
-function catching(): void {
-    basic.forever(function() {
-        toObserve()
-        while(!toObserve() && !firstObserve) {
-            for (let i = 0; i < 2; i++) {
-                TPBot.setTravelTime(TPBot.DriveDirection.Forward, 50, 2)
-                basic.pause(500)
-            }
-            TPBot.setWheels(100, -100)
-            basic.pause(500)
-        }
-        if (toObserve()) {
-            firstObserve = true
-            TPBot.stopCar()
-            basic.pause(1000)
-        }
-    })
-    
+//driving
+function driving(): void {
+    blackLine()
+    if (firstObserve) basic.showString("Hello!")
+    //catching function + servo
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

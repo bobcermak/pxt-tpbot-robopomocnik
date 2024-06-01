@@ -11,7 +11,8 @@
     "files": [
         "main.ts",
         "README.md",
-        "agility.ts"
+        "agility.ts",
+        "glorious-morning.ts"
     ],
     "testFiles": [
         "test.ts"

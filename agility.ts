@@ -1,12 +1,12 @@
 //FUNCTIONS
 
-// start preset
+//start preset
 function presetMode() {
     PlanetX_AILens.initModule()
     PlanetX_AILens.switchfunc(PlanetX_AILens.FuncList.Ball)
 }
 
-// checking blackLine and if it is ball
+//checking blackLine and if it is ball
 let firstObserve: boolean = false
 
 function blackLine(): void {
@@ -16,11 +16,9 @@ function blackLine(): void {
             firstObserve = true
             TPBot.stopCar()
         }
-
         if (TPBot.trackLine(TPBot.TrackingState.L_R_line) && !firstObserve) {
             TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 60)
         }
-
         if (!TPBot.trackLine(TPBot.TrackingState.L_R_line) && !firstObserve) {
             TPBot.setWheels(80, -80)
             basic.pause(400)
@@ -28,14 +26,14 @@ function blackLine(): void {
     }
 }
 
-// sonar sensor
+//sonar sensor
 function sonar() {
 
 }
 
-// AI CAMERA
+//AI CAMERA
 
-// find balls - colors
+//find balls - colors
 function findBalls(): string {
     let statusBall: string
     PlanetX_AILens.cameraImage()

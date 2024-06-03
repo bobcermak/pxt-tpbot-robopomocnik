@@ -4,6 +4,8 @@
 function presetMode() {
     PlanetX_AILens.initModule()
     PlanetX_AILens.switchfunc(PlanetX_AILens.FuncList.Ball)
+    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 85)
+    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
 }
 
 //checking blackLine and if it is ball
@@ -13,6 +15,7 @@ function blackLine(): void {
     while (!firstObserve) {
         toObserve()
         if (toObserve()) {
+            TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 42)
             firstObserve = true
             TPBot.stopCar()
         }
@@ -23,6 +26,12 @@ function blackLine(): void {
             TPBot.setWheels(40, -40)
         }
     }
+}
+
+//catching - drive slowly and catch Ball
+
+function catching(): void {
+    
 }
 
 //sonar sensor
@@ -101,7 +110,7 @@ function driving(): void {
             else red++
         }
         if (blue > red) basic.showString("B")
-        else basic.showString("R")
+        else if (red > blue) basic.showString("R")
     }
     //catching function + servo
 }

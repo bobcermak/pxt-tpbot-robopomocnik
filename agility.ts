@@ -43,25 +43,46 @@ function blackLineCards(): void {
     }
 }
 
-
-//catching - drive slowly and catch Ball
+//catching ball
 let countBall: number = 0
-let onlyFree: boolean = false
+let lockForCardsToGo: boolean = false
+
 function catching(): void {
-    while (toObserve()) {
-        for (let i = 0; i < 4; i++) {
-            TPBot.setWheels(20, 20)
-            basic.pause(150)
-            TPBot.stopCar()
+    let run: boolean = true
+
+    while (run) {
+        while (!checkIfBallCaught) {
+            while (toObserve()) {
+                for (let i = 0; i < 4; i++) {
+                    TPBot.setWheels(20, 20)
+                    basic.pause(150)
+                    TPBot.stopCar()
+                }
+            }
+            if (!toObserve() && firstObserve) {
+                TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)
+                checkIfBallCaught()
+            }
         }
+        if (!checkIfBallCaught) {
+            TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
+            basic.pause(500)
+        }
+        else if (checkIfBallCaught()) countBall++
     }
-    if (!toObserve() && firstObserve) {
-        TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)
-        countBall++
-    }
-    onlyFree = true
+    run = false
+    lockForCardsToGo = true
     TPBot.stopCar()
 }
+
+
+//checks if the ball is caught
+function checkIfBallCaught(): boolean {
+    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 30)
+    toObserve()
+    return toObserve()
+}
+
 
 //sonar sensor
 function sonar() {
@@ -139,7 +160,7 @@ function driving(): void {
         basic.showString(findBalls())
         catching()
     }
-    if (onlyFree) {
+    if (lockForCardsToGo) {
         TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 120)
         PlanetX_AILens.switchfunc(PlanetX_AILens.FuncList.Card)
         blackLineCards()

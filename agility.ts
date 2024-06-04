@@ -8,30 +8,59 @@ function presetMode() {
     TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
 }
 
-//checking blackLine and if it is ball
-let firstObserve: boolean = false
+//checking blackLine and if it is balls
+let firstObserve: boolean = false;
 
-function blackLine(): void {
+function blackLineBalls(): void {
     while (!firstObserve) {
         toObserve()
         if (toObserve()) {
-            TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 42)
-            firstObserve = true
-            TPBot.stopCar()
-        }
-        if (TPBot.trackLine(TPBot.TrackingState.L_R_line) && !firstObserve) {
-            TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 40)
-        }
-        if (!TPBot.trackLine(TPBot.TrackingState.L_R_line) && !firstObserve) {
-            TPBot.setWheels(40, -40)
+            firstObserve = true;
+            TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 55);
+            TPBot.stopCar();
+        } 
+        else if (TPBot.trackLine(TPBot.TrackingState.L_R_line)) {
+            TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 40);
+        } 
+        else {
+            TPBot.setWheels(40, -40);
         }
     }
 }
 
-//catching - drive slowly and catch Ball
+//checking blackLine and if it is cards
+function blackLineCards(): void {
+    findCards()
+    while (findCards() === "N") {
+        findCards()
+        if (findBalls() === findCards()) basic.showNumber(0) //bude fixnuti - nepamatuji si ze ma modrou kulicku
+        else if (TPBot.trackLine(TPBot.TrackingState.L_R_line)) {
+            TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 40);
+        }
+        else {
+            TPBot.setWheels(40, -40);
+        }
+    }
+}
 
+
+//catching - drive slowly and catch Ball
+let countBall: number = 0
+let onlyFree: boolean = false
 function catching(): void {
-    
+    while (toObserve()) {
+        for (let i = 0; i < 4; i++) {
+            TPBot.setWheels(20, 20)
+            basic.pause(150)
+            TPBot.stopCar()
+        }
+    }
+    if (!toObserve() && firstObserve) {
+        TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)
+        countBall++
+    }
+    onlyFree = true
+    TPBot.stopCar()
 }
 
 //sonar sensor
@@ -53,8 +82,9 @@ function findBalls(): string {
         if (PlanetX_AILens.ballColor(PlanetX_AILens.ballColorList.Blue)) blueCount++  
         else if (PlanetX_AILens.ballColor(PlanetX_AILens.ballColorList.Red)) redCount++ 
     }
-    if (blueCount > redCount && blueCount >= 3) statusBall = "B"
-    else if (redCount > blueCount && redCount >= 3) statusBall = "R"
+    if (blueCount > redCount && blueCount >= 2) statusBall = "B"
+    else if (redCount > blueCount && redCount >= 2) statusBall = "R"
+    else statusBall = "N"
     
     return statusBall
 }
@@ -98,19 +128,21 @@ function findCards(): string {
 //MAIN FUNCTIONS
 
 //driving
-let blue: number = 0
-let red: number = 0
 
 function driving(): void {
-    blackLine()
+    blackLineBalls()
     if (firstObserve) {  //sorting between blue and red
-        for (let i = 0; i < 3; i++) {
+        findBalls()
+        while (findBalls() === "N") {
             findBalls()
-            if (findBalls() === "B") blue++
-            else red++
         }
-        if (blue > red) basic.showString("B")
-        else if (red > blue) basic.showString("R")
+        basic.showString(findBalls())
+        catching()
+    }
+    if (onlyFree) {
+        TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 120)
+        PlanetX_AILens.switchfunc(PlanetX_AILens.FuncList.Card)
+        blackLineCards()
     }
     //catching function + servo
 }

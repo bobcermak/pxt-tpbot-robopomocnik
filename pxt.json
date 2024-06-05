@@ -12,7 +12,8 @@
         "main.ts",
         "README.md",
         "agility.ts",
-        "glorious-morning.ts"
+        "glorious-morning.ts",
+        "start-song.ts"
     ],
     "testFiles": [
         "test.ts"

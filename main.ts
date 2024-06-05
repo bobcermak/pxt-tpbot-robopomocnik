@@ -1,20 +1,39 @@
 //PROGRAM STRUCTURE
 
 //menu start
-presetMode()
+let block: boolean = true
 
-
+basic.forever(function() {
+    if (block) {
+        basic.showLeds(`
+        . . . . .
+        . . # . .
+        . # # # .
+        # . # . #
+        . . # . .
+        `)
+        basic.pause(300)
+        basic.showLeds(`
+        . . # . .
+        . # # # .
+        # . # . #
+        . . # . .
+        . . # . .
+        `)
+        basic.pause(700)
+    }
+})
 
 //MAIN
-driving()
+input.onLogoEvent(TouchButtonEvent.Pressed, function() {
+    basic.clearScreen()
+    block = false
 
+    startSong()
 
-
-
-
-
-
-
-
+    presetMode()
+    basic.pause(200)
+    driving()
+})
 
 //ENDING

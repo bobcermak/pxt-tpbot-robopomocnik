@@ -15,14 +15,20 @@ function blackLineBalls(): void {
     while (!firstObserve) {
         toObserve()
         if (toObserve()) {
-            firstObserve = true;
-            TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 55);
+            TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 60);
             TPBot.stopCar();
+            basic.pause(1000)
+            if (!toObserve()) {
+                firstObserve = false
+                TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 85)
+                TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 20);
+            }
+            else firstObserve = true
         } 
         else if (TPBot.trackLine(TPBot.TrackingState.L_R_line)) {
-            TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 40);
+            TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 20);
         } 
-        else TPBot.setWheels(40, -40); 
+        else if (!TPBot.trackLine(TPBot.TrackingState.L_R_line)) TPBot.setWheels(-20, -30);
     }
 }
 
@@ -31,11 +37,13 @@ function blackLineCards(): void {
     findCards()
     while (findCards() === "N") {
         findCards()
-        if (findBalls() === findCards()) basic.showNumber(0) //bude fixnuti - nepamatuji si ze ma modrou kulicku
-        else if (TPBot.trackLine(TPBot.TrackingState.L_R_line)) {
-            TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 40);
+        if (findCards() === colorBall[0]) {
+            //code
         }
-        else TPBot.setWheels(40, -40);
+        else if (TPBot.trackLine(TPBot.TrackingState.L_R_line)) {
+            TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 20);
+        }
+        else if (!TPBot.trackLine(TPBot.TrackingState.L_R_line)) TPBot.setWheels(-20, -30);
     }
 }
 
@@ -44,33 +52,36 @@ let countBall: number = 0
 let lockForCardsToGo: boolean = false
 
 function catching(): void {
-    let run: boolean = true
     let checkCaught: boolean = false
-    while (run) {
-        while (!checkCaught) {
-            while (toObserve()) {
-                TPBot.setWheels(25, 25)
-                basic.pause(150)
-                TPBot.stopCar()
+    while (!checkCaught) {
+        while (toObserve()) {
+            TPBot.setWheels(25, 25)
+            basic.pause(150)
+            TPBot.stopCar()
+        }
+        if (!toObserve() && firstObserve) {
+            checkCaught = checkIfBallCaught()
+            if (!checkCaught) {
+                basic.pause(1000)
+                finding()
             }
-            if (!toObserve() && firstObserve) {
+            else {
+                TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)
                 checkCaught = checkIfBallCaught()
-                if (!checkCaught) {
-                    basic.pause(1000)
-                    finding()
+                if (checkCaught) {
+                    countBall++
                 }
                 else {
-                    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)
-                    run = false
-                    countBall++
+                    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
+                    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 85)
+                    checkCaught = false
                 }
             }
         }
-        
     }
-    run = false
-    lockForCardsToGo = true
-    TPBot.stopCar()
+        
+lockForCardsToGo = true
+TPBot.stopCar()
 }
 
 //checks if the ball is caught
@@ -156,6 +167,7 @@ function findCards(): string {
 //MAIN FUNCTIONS
 
 //driving
+let colorBall: Array<string> = []
 
 function driving(): void {
     blackLineBalls()
@@ -165,6 +177,8 @@ function driving(): void {
             findBalls()
         }
         basic.showString(findBalls())
+        colorBall.push(findBalls())
+    
         catching()
         basic.pause(1500)
     }

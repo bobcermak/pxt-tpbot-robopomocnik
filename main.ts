@@ -32,7 +32,7 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function() {
     startSong()
 
     presetMode()
-    basic.pause(200)
+    basic.pause(300)
     driving()
 })
 

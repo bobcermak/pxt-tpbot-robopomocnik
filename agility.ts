@@ -68,7 +68,7 @@ function catching(): void {
             else {
                 TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)
                 checkCaught = checkIfBallCaught()
-                if (checkCaught) {
+                if (checkCaught && findBalls() === colorBall[0]) {
                     countBall++
                 }
                 else {

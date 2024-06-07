@@ -21,14 +21,14 @@ function blackLineBalls(): void {
             if (!toObserve()) {
                 firstObserve = false
                 TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 85)
-                TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 20);
+                TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 30);
             }
             else firstObserve = true
         } 
-        else if (TPBot.trackLine(TPBot.TrackingState.L_R_line)) {
-            TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 20);
+        else if (TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) < 20) {
+            TPBot.setWheels(40, -40);
         } 
-        else if (!TPBot.trackLine(TPBot.TrackingState.L_R_line)) TPBot.setWheels(-20, -30);
+        else TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 30);
     }
 }
 
@@ -40,10 +40,10 @@ function blackLineCards(): void {
         if (findCards() === colorBall[0]) {
             //code
         }
-        else if (TPBot.trackLine(TPBot.TrackingState.L_R_line)) {
-            TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 20);
+        else if (TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) < 20) {
+            TPBot.setWheels(40, -40);
         }
-        else if (!TPBot.trackLine(TPBot.TrackingState.L_R_line)) TPBot.setWheels(-20, -30);
+        else TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 30);
     }
 }
 
@@ -67,15 +67,20 @@ function catching(): void {
             }
             else {
                 TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)
-                checkCaught = checkIfBallCaught()
-                if (checkCaught && findBalls() === colorBall[0]) {
-                    countBall++
+                TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 85);
+                let milis = control.millis()
+                while (!toObserve() && (control.millis() - milis) < 7000) {
+                    TPBot.setWheels(30, -30)
+                    basic.pause(300)
+                    TPBot.stopCar()
+                    basic.pause(700)
                 }
-                else {
-                    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
-                    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 85)
-                    checkCaught = false
+                if (toObserve()) {
+                    findBalls()
+                    if (findBalls() === colorBall[0]) checkCaught = false
+                    else checkCaught = true
                 }
+                else checkCaught = true
             }
         }
     }
@@ -86,7 +91,7 @@ TPBot.stopCar()
 
 //checks if the ball is caught
 function checkIfBallCaught(): boolean {
-    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 30)
+    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 25)
     basic.pause(1000)
     return toObserve()
 }

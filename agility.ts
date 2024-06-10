@@ -13,7 +13,7 @@ let firstObserve: boolean = false;
 
 function sonarBalls(): void {
     while (!firstObserve) {
-        if (toObserve()) {
+        if (toObserve() && findBalls() !== colorBall[0]) {
             TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 55);
             TPBot.stopCar();
             basic.pause(1000)
@@ -42,13 +42,13 @@ function sonarCards(): void {
     let distance: number = 0
 
     while (!isPlaced) {
-        while (findCards() !== colorBall[0]) {
+        while (findCards() !== colorBall[0 + allCountBall]) {
             TPBot.setWheels(30, -30)
             basic.pause(300)
             TPBot.stopCar()
             basic.pause(700)
         }
-        if (findCards() === colorBall[0]) {
+        if (findCards() === colorBall[0 + allCountBall]) {
             firstObserveCard = true
             while (firstObserveCard) {
                 TPBot.setWheels(25, 25)
@@ -60,9 +60,12 @@ function sonarCards(): void {
                     TPBot.stopCar()
                     TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
                     basic.pause(1000)
-                    TPBot.setWheels(-40, -40)
-                    basic.pause(500)
+                    while (TPBot.sonarReturn(TPBot.SonarUnit.Centimeters) < 50) {
+                        TPBot.setWheels(-40, -40)
+                    }
+                    TPBot.stopCar()
                     allCountBall++
+                    basic.showNumber(allCountBall)
                     isPlaced = true
                     break
                 }
@@ -225,6 +228,9 @@ function driving(): void {
             TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 120)
             PlanetX_AILens.switchfunc(PlanetX_AILens.FuncList.Color)
             sonarCards()
+            presetMode()
+            firstObserve = false
+            continue
         }
     }
     

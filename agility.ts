@@ -42,13 +42,13 @@ function sonarCards(): void {
     let distance: number = 0
 
     while (!isPlaced) {
-        while (findCards() !== colorBall[0 + allCountBall]) {
+        while (findCards() !== colorBall[allCountBall]) {
             TPBot.setWheels(30, -30)
             basic.pause(300)
             TPBot.stopCar()
             basic.pause(700)
         }
-        if (findCards() === colorBall[0 + allCountBall]) {
+        if (findCards() === colorBall[allCountBall]) {
             firstObserveCard = true
             while (firstObserveCard) {
                 TPBot.setWheels(25, 25)
@@ -56,7 +56,7 @@ function sonarCards(): void {
                 TPBot.stopCar()
 
                 distance = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters)
-                if (distance <= 15 && findCards() === colorBall[0]) {
+                if (distance <= 15 && findCards() === colorBall[allCountBall]) {
                     TPBot.stopCar()
                     TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
                     basic.pause(1000)
@@ -69,11 +69,11 @@ function sonarCards(): void {
                     isPlaced = true
                     break
                 }
-                if (findCards() !== colorBall[0]) {
+                if (findCards() !== colorBall[allCountBall]) {
                     firstObserveCard = false
                     TPBot.stopCar()
                     basic.pause(1000)
-                    while (findCards() !== colorBall[0]) {
+                    while (findCards() !== colorBall[allCountBall]) {
                         TPBot.setWheels(25, -25)
                         basic.pause(800)
                         TPBot.stopCar()
@@ -112,13 +112,13 @@ function catching(): void {
                 TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 85);
                 basic.pause(1000)
                 let milis = control.millis()
-                while (findBalls() !== colorBall[0] && (control.millis() - milis) < 26000) {
+                while (findBalls() !== colorBall[allCountBall] && (control.millis() - milis) < 26000) {
                     TPBot.setWheels(30, -30)
                     basic.pause(300)
                     TPBot.stopCar()
                     basic.pause(700)
                 }
-                if (findBalls() === colorBall[0]) {
+                if (findBalls() === colorBall[allCountBall]) {
                     TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
                     checkCaught = false
                 }
@@ -230,8 +230,16 @@ function driving(): void {
             sonarCards()
             presetMode()
             firstObserve = false
-            continue
+            if (allCountBall === 2) {
+                TPBot.setWheels(40, -40)
+                let milisSong: number = control.millis()
+                while ((control.millis() - milisSong) < 32000) {
+                    endSong()
+                }
+            }
+            else continue
         }
+        
     }
     
 }

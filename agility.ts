@@ -107,22 +107,8 @@ function catching(): void {
                 basic.pause(1000)
                 finding()
             }
-            else {
-                TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)
-                TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 85);
-                basic.pause(1000)
-                let milis = control.millis()
-                while (findBalls() !== colorBall[allCountBall] && (control.millis() - milis) < 26000) {
-                    TPBot.setWheels(30, -30)
-                    basic.pause(300)
-                    TPBot.stopCar()
-                    basic.pause(700)
-                }
-                if (findBalls() === colorBall[allCountBall]) {
-                    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
-                    checkCaught = false
-                }
-                else checkCaught = true
+            else if (checkCaught) {
+                checkCaught = true
             }
         }
     }
@@ -133,20 +119,31 @@ TPBot.stopCar()
 
 //checks if the ball is caught
 function checkIfBallCaught(): boolean {
+    let countCheck: number = 0
     TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 18)
-    basic.pause(1000)
-    return toObserve()
+    toObserve()
+    if (toObserve()) {
+        countCheck += 1
+        TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)
+        basic.pause(1000)
+        if (toObserve() && countCheck === 1) {
+            countCheck += 1
+        }
+    }
+    
+    return countCheck === 2
 }
 
 //when ball was not catch, robot is finding ball
 function finding(): void {
     TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 85)
-    while (!toObserve()) {
+    while (findBalls() !== colorBall[allCountBall]) {
         TPBot.setWheels(30, -30)
         basic.pause(300)
         TPBot.stopCar()
         basic.pause(700)
     }
+    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
 }
 
 //AI CAMERA

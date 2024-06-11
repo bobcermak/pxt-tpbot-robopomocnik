@@ -25,6 +25,8 @@ basic.forever(function () {
 })
 
 //MAIN
+let blockWay: boolean = true
+
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     block = false
     basic.pause(200)
@@ -34,6 +36,15 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
 
     presetMode()
     basic.pause(300)
+    //scanning map
+    while (blockWay) {
+        let wayY = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters)
+        basic.showNumber(wayY)
+        while (TPBot.sonarReturn(TPBot.SonarUnit.Centimeters) < (wayY / 2)) {
+            TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 30);
+        }
+        TPBot.stopCar()
+    }
     driving()
 })
 

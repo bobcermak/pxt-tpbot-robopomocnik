@@ -14,7 +14,7 @@ let firstObserve: boolean = false;
 function sonarBalls(): void {
     while (!firstObserve) {
         if (toObserve() && findBalls() !== colorBall[0]) {
-            TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 55);
+            TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 53);
             TPBot.stopCar();
             basic.pause(1000)
             if (!toObserve()) {
@@ -120,7 +120,7 @@ TPBot.stopCar()
 //checks if the ball is caught
 function checkIfBallCaught(): boolean {
     let countCheck: number = 0
-    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 18)
+    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 10)
     toObserve()
     if (toObserve()) {
         countCheck += 1

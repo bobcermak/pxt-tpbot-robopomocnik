@@ -10,11 +10,23 @@ function presetMode() {
 
 //checking sonar and if it is balls
 let firstObserve: boolean = false;
-
+let checkMilis: boolean = true
+let n: number = 0
 function sonarBalls(): void {
     while (!firstObserve) {
+        if (!toObserve() || n < 20) {
+            n++
+            TPBot.setWheels(30, -27)
+            basic.pause(300)
+            TPBot.stopCar()
+            basic.pause(700)
+            if (n >= 20) {
+                TPBot.setTravelTime(TPBot.DriveDirection.Forward, 30, 2)
+                n = 0
+            }
+        }
         if (toObserve() && findBalls() !== colorBall[0]) {
-            TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 53);
+            TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 52);
             TPBot.stopCar();
             basic.pause(1000)
             if (!toObserve()) {
@@ -23,13 +35,12 @@ function sonarBalls(): void {
                 TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 30);
             }
             else firstObserve = true
-        } 
+        }
         else if (TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) < 25) {
-            TPBot.setWheels(-40, -40);
+            TPBot.setWheels(-40, -37);
             basic.pause(500)
-            TPBot.setWheels(40, -40);
-        } 
-        else TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 30);
+            TPBot.setWheels(40, -37);
+        }
     }
 }
 
@@ -43,7 +54,7 @@ function sonarCards(): void {
 
     while (!isPlaced) {
         while (findCards() !== colorBall[allCountBall]) {
-            TPBot.setWheels(30, -30)
+            TPBot.setWheels(30, -27)
             basic.pause(300)
             TPBot.stopCar()
             basic.pause(700)
@@ -51,7 +62,7 @@ function sonarCards(): void {
         if (findCards() === colorBall[allCountBall]) {
             firstObserveCard = true
             while (firstObserveCard) {
-                TPBot.setWheels(25, 25)
+                TPBot.setWheels(25, 22)
                 basic.pause(150)
                 TPBot.stopCar()
 
@@ -61,7 +72,7 @@ function sonarCards(): void {
                     TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
                     basic.pause(1000)
                     while (TPBot.sonarReturn(TPBot.SonarUnit.Centimeters) < 50) {
-                        TPBot.setWheels(-40, -40)
+                        TPBot.setWheels(-40, -37)
                     }
                     TPBot.stopCar()
                     allCountBall++
@@ -74,11 +85,11 @@ function sonarCards(): void {
                     TPBot.stopCar()
                     basic.pause(1000)
                     while (findCards() !== colorBall[allCountBall]) {
-                        TPBot.setWheels(25, -25)
+                        TPBot.setWheels(25, -22)
                         basic.pause(800)
                         TPBot.stopCar()
                         basic.pause(1000)
-                        TPBot.setWheels(-25, 25)
+                        TPBot.setWheels(-25, 22)
                         basic.pause(800)
                         TPBot.stopCar()
                         basic.pause(1000)
@@ -95,33 +106,39 @@ let lockForCardsToGo: boolean = false
 
 function catching(): void {
     let checkCaught: boolean = false
+    let milisFinding: number = control.millis()
     while (!checkCaught) {
-        while (toObserve()) {
+        while (toObserve() && (control.millis() - milisFinding) < 6000) {
             TPBot.setWheels(25, 25)
             basic.pause(150)
             TPBot.stopCar()
+            if ((control.millis() - milisFinding) >= 6000) {
+                if (checkIfBallCaught()) checkCaught = true
+                else {
+                    milisFinding = control.millis()
+                    checkCaught = false
+                }
+            }
         }
         if (!toObserve() && firstObserve) {
-            checkCaught = checkIfBallCaught()
-            if (!checkCaught) {
+            if (!checkIfBallCaught()) {
                 basic.pause(1000)
                 finding()
             }
-            else if (checkCaught) {
+            else if (checkIfBallCaught()) {
                 checkCaught = true
             }
         }
     }
-        
-lockForCardsToGo = true
-TPBot.stopCar()
+
+    lockForCardsToGo = true
+    TPBot.stopCar()
 }
 
 //checks if the ball is caught
 function checkIfBallCaught(): boolean {
     let countCheck: number = 0
-    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 10)
-    toObserve()
+    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 12)
     if (toObserve()) {
         countCheck += 1
         TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)
@@ -130,7 +147,7 @@ function checkIfBallCaught(): boolean {
             countCheck += 1
         }
     }
-    
+
     return countCheck === 2
 }
 
@@ -157,13 +174,13 @@ function findBalls(): string {
 
     for (let i = 0; i < 12; i++) {
         PlanetX_AILens.cameraImage()
-        if (PlanetX_AILens.ballColor(PlanetX_AILens.ballColorList.Blue)) blueCount++  
-        else if (PlanetX_AILens.ballColor(PlanetX_AILens.ballColorList.Red)) redCount++ 
+        if (PlanetX_AILens.ballColor(PlanetX_AILens.ballColorList.Blue)) blueCount++
+        else if (PlanetX_AILens.ballColor(PlanetX_AILens.ballColorList.Red)) redCount++
     }
     if (blueCount > redCount && blueCount >= 2) statusBall = "B"
     else if (redCount > blueCount && redCount >= 2) statusBall = "R"
     else statusBall = "N"
-    
+
     return statusBall
 }
 
@@ -228,7 +245,7 @@ function driving(): void {
             presetMode()
             firstObserve = false
             if (allCountBall === 2) {
-                TPBot.setWheels(40, -40)
+                TPBot.setWheels(40, -37)
                 let milisSong: number = control.millis()
                 while ((control.millis() - milisSong) < 32000) {
                     endSong()
@@ -236,7 +253,7 @@ function driving(): void {
             }
             else continue
         }
-        
+
     }
-    
+
 }

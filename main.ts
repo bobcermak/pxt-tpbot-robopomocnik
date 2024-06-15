@@ -38,28 +38,34 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     presetMode()
     basic.pause(300)
     //scanning map
+    basic.showString("L")
     let wayY = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
     TPBot.stopCar()
     basic.pause(500)
-    TPBot.setTravelTime(TPBot.DriveDirection.Forward, 40, 1)
+    TPBot.setTravelTime(TPBot.DriveDirection.Forward, 40, 2)
     TPBot.stopCar()
-    for (let i = 0; i < 4; i++) {
-        TPBot.setWheels(30, -30)
+    basic.pause(500)
+    
+    for (let i = 0; i < 3; i++) {
+        TPBot.setWheels(30, -27)
         basic.pause(300)
         TPBot.stopCar()
         basic.pause(700)
     }
+
     let wX: number = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
     basic.pause(1000)
-    for (let i = 0; i < 8; i++) {
-        TPBot.setWheels(30, -30)
+    for (let i = 0; i < 7; i++) {
+        TPBot.setWheels(30, -27)
         basic.pause(300)
         TPBot.stopCar()
         basic.pause(700)
     }
+
     let wX2: number = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
     let wayX: number = wX + wX2 + 10
     basic.pause(500)
+    basic.clearScreen()
     driving()
 })
 

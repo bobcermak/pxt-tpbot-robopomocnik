@@ -45,7 +45,7 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     TPBot.setTravelTime(TPBot.DriveDirection.Forward, 40, 2)
     TPBot.stopCar()
     basic.pause(500)
-    
+
     for (let i = 0; i < 3; i++) {
         TPBot.setWheels(30, -27)
         basic.pause(300)
@@ -66,6 +66,7 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     let wayX: number = wX + wX2 + 10
     basic.pause(500)
     basic.clearScreen()
+    //Main function driving
     driving()
 })
 

@@ -67,17 +67,17 @@ function sonarCards(y: number, x: number): void {
         let distanceY = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
 
         while (yCheck) {
-            if (distanceY < (wayY / 2)) {
-                while (distanceY <= ((wayY / 2) -5) || distanceY >= ((wayY / 2) + 5)) {
+            if (distanceY < (y / 2)) {
+                while (distanceY <= ((y / 2) - 5) || distanceY >= ((y / 2) + 5)) {
                     TPBot.setWheels(-40, -37)
                     basic.pause(300)
                     TPBot.stopCar()
                     basic.pause(700)
                     distanceY = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
                 }
-            } 
+            }
             else {
-                while (distanceY > ((wayY / 2) + 5) || distanceY < ((wayY / 2) - 5)) {
+                while (distanceY > ((y / 2) + 5) || distanceY < ((y / 2) - 5)) {
                     TPBot.setWheels(40, 37)
                     basic.pause(300)
                     TPBot.stopCar()
@@ -85,7 +85,7 @@ function sonarCards(y: number, x: number): void {
                     distanceY = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
                 }
             }
-            if (distanceY >= ((wayY / 2) - 5) && distanceY <= ((wayY / 2) + 5)) {
+            if (distanceY >= ((y / 2) - 5) && distanceY <= ((y / 2) + 5)) {
                 TPBot.stopCar()
                 basic.pause(1000)
                 yCheck = false
@@ -103,17 +103,17 @@ function sonarCards(y: number, x: number): void {
             }
             distanceX = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
             basic.pause(1000)
-            if (distanceX < (wayX / 2)) {
-                while (distanceX <= ((wayX / 2) - 5) || distanceX >= ((wayX / 2) + 5)) {
+            if (distanceX < (x / 2)) {
+                while (distanceX <= ((x / 2) - 5) || distanceX >= ((x / 2) + 5)) {
                     TPBot.setWheels(-40, -37)
                     basic.pause(300)
                     TPBot.stopCar()
                     basic.pause(700)
                     distanceX = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
                 }
-            } 
+            }
             else {
-                while (distanceX > ((wayX / 2) + 5) || distanceX < ((wayX / 2) - 5)) {
+                while (distanceX > ((x / 2) + 5) || distanceX < ((x / 2) - 5)) {
                     TPBot.setWheels(40, 37)
                     basic.pause(300)
                     TPBot.stopCar()
@@ -121,7 +121,7 @@ function sonarCards(y: number, x: number): void {
                     distanceX = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
                 }
             }
-            if (distanceX >= ((wayX / 2) - 5) && distanceX <= ((wayX / 2) + 5)) {
+            if (distanceX >= ((x / 2) - 5) && distanceX <= ((x / 2) + 5)) {
                 TPBot.stopCar()
                 xCheck = false
             }
@@ -221,7 +221,7 @@ function checkIfBallCaught(): boolean {
             countCheck += 1
         }
     }
-    
+
     return countCheck === 2
 }
 

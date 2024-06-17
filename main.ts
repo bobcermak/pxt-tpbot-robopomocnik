@@ -56,7 +56,7 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
         basic.pause(700)
     }
 
-    let wX: number = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
+    wayX += TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
     basic.pause(1000)
     for (let i = 0; i < 7; i++) {
         TPBot.setWheels(30, -27)
@@ -65,8 +65,7 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
         basic.pause(700)
     }
 
-    let wX2: number = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
-    wayX = wX + wX2 + 10
+    wayX += TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) + 10
     basic.pause(500)
     basic.clearScreen()
     //Main function driving

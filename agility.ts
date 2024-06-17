@@ -212,7 +212,7 @@ function catching(): void {
 //checks if the ball is caught
 function checkIfBallCaught(): boolean {
     let countCheck: number = 0
-    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 10)
+    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 15)
     if (toObserve()) {
         countCheck += 1
         TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)

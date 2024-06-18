@@ -49,7 +49,7 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     TPBot.stopCar()
     basic.pause(500)
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
         TPBot.setWheels(30, -27)
         basic.pause(300)
         TPBot.stopCar()
@@ -58,7 +58,7 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
 
     wayX += TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
     basic.pause(1000)
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 8; i++) {
         TPBot.setWheels(30, -27)
         basic.pause(300)
         TPBot.stopCar()

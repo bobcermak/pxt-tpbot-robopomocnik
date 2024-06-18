@@ -1,6 +1,6 @@
-//PROGRAM STRUCTURE
+// PROGRAM STRUCTURE
 
-//menu start
+// Menu start with flashing LED pattern
 let block: boolean = true
 
 basic.forever(function () {
@@ -24,23 +24,28 @@ basic.forever(function () {
     }
 })
 
-//MAIN
+// MAIN FUNCTION
+
+// Flags for controlling program flow
 let blockWay: boolean = true
 let blockWayY: boolean = true
 
+// Variables for storing way coordinates
 let wayY: number
 let wayX: number
 
+// Event handler for starting the program
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     block = false
     basic.pause(200)
     basic.clearScreen()
 
-    startSong()
+    startSong() // Start playing initial song
 
-    presetMode()
+    presetMode() // Set preset mode for TPBot
     basic.pause(300)
-    //scanning map
+
+    // Scanning map and setting initial coordinates
     basic.showString("L")
     wayY = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) + 10
     TPBot.stopCar()
@@ -49,6 +54,7 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     TPBot.stopCar()
     basic.pause(500)
 
+    // Rotating to find the X-axis coordinate
     for (let i = 0; i < 4; i++) {
         TPBot.setWheels(30, -27)
         basic.pause(300)
@@ -56,19 +62,23 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
         basic.pause(700)
     }
 
-    wayX += TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
+    let wX = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
     basic.pause(1000)
-    for (let i = 0; i < 8; i++) {
+
+    // Further rotating to refine the X-axis coordinate
+    for (let i = 0; i < 7; i++) {
         TPBot.setWheels(30, -27)
         basic.pause(300)
         TPBot.stopCar()
         basic.pause(700)
     }
 
-    wayX += TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) + 10
+    let wX2 = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) + 10
+    wayX = wX + wX2
     basic.pause(500)
     basic.clearScreen()
-    //Main function driving
+
+    // Main function to start driving the robot
     driving()
 })
 

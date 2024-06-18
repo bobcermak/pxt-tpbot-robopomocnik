@@ -26,60 +26,44 @@ basic.forever(function () {
 
 // MAIN FUNCTION
 
-// Flags for controlling program flow
-let blockWay: boolean = true
-let blockWayY: boolean = true
+//MENU
 
-// Variables for storing way coordinates
-let wayY: number
-let wayX: number
+let menuCount: number = 1
+let logoStart: number = 0
 
-// Event handler for starting the program
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
-    block = false
+    logoStart++
     basic.pause(200)
     basic.clearScreen()
-
-    startSong() // Start playing initial song
-
-    presetMode() // Set preset mode for TPBot
-    basic.pause(300)
-
-    // Scanning map and setting initial coordinates
-    basic.showString("L")
-    wayY = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) + 10
-    TPBot.stopCar()
-    basic.pause(500)
-    TPBot.setTravelTime(TPBot.DriveDirection.Forward, 40, 2)
-    TPBot.stopCar()
-    basic.pause(500)
-
-    // Rotating to find the X-axis coordinate
-    for (let i = 0; i < 4; i++) {
-        TPBot.setWheels(30, -27)
-        basic.pause(300)
-        TPBot.stopCar()
-        basic.pause(700)
+    block = false
+    if (logoStart === 1) startSong2()
+    if (logoStart === 2) {
+        startSong() // Start playing initial song
+        if (menuCount === 1 || menuCount === 2) {
+            scanningMap()
+            menu()
+        }
+        else if (menuCount === 3 || menuCount === 4 || menuCount === 5) {
+            menu()
+        }
     }
-
-    let wX = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
-    basic.pause(1000)
-
-    // Further rotating to refine the X-axis coordinate
-    for (let i = 0; i < 7; i++) {
-        TPBot.setWheels(30, -27)
-        basic.pause(300)
-        TPBot.stopCar()
-        basic.pause(700)
-    }
-
-    let wX2 = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) + 10
-    wayX = wX + wX2
-    basic.pause(500)
-    basic.clearScreen()
-
-    // Main function to start driving the robot
-    driving()
 })
 
-//ENDING
+//menu count++
+input.onButtonPressed(Button.A, function() {
+    if (!block && menuCount !== 1) menuCount--
+    music.play(music.tonePlayable(784, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+})
+
+input.onButtonPressed(Button.B, function () {
+    if (!block && menuCount !== 5) menuCount++
+    music.play(music.tonePlayable(880, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+})
+
+//only menu count
+basic.forever(function() {
+    if (!block && logoStart < 2) {
+        basic.showNumber(menuCount)
+    }
+})
+

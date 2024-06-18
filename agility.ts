@@ -1,5 +1,5 @@
-//start preset
-function presetMode() {
+//START PRESET
+function presetMode(): void {
     // Initialize the PlanetX AI Lens module
     PlanetX_AILens.initModule()
     // Switch AI Lens function to detect balls
@@ -9,6 +9,72 @@ function presetMode() {
     // Set servo S2 to initial position (240 degrees)
     TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 240)
 }
+
+//game modes
+function menu(): void {
+    if (menuCount === 1) sortingOneBall()
+    else if (menuCount === 2) sortingBalls()
+    else if (menuCount === 3) findingBall()
+    else if (menuCount === 4) sonarCar()
+    else if (menuCount === 5) scanningMapUpgrade()
+}
+
+function simpleVariables(): void {
+    checkEnd = false
+    firstObserve = false
+    isPlaced = false
+    yCheck = true
+    xCheck = false
+    checkCaught = false
+}
+
+//scanning map
+let blockWay: boolean = true
+let blockWayY: boolean = true
+
+// Variables for storing way coordinates
+let wayY: number
+let wayX: number
+
+function scanningMap(): void {
+    presetMode() // Set preset mode for TPBot
+    basic.pause(300)
+
+    // Scanning map and setting initial coordinates
+    basic.showIcon(IconNames.Happy)
+    wayY = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) + 10
+    TPBot.stopCar()
+    basic.pause(500)
+    TPBot.setTravelTime(TPBot.DriveDirection.Forward, 40, 2)
+    TPBot.stopCar()
+    basic.pause(500)
+
+    // Rotating to find the X-axis coordinate
+    for (let i = 0; i < 4; i++) {
+        TPBot.setWheels(30, -27)
+        basic.pause(300)
+        TPBot.stopCar()
+        basic.pause(700)
+    }
+
+    let wX = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
+    basic.pause(1000)
+
+    // Further rotating to refine the X-axis coordinate
+    for (let i = 0; i < 7; i++) {
+        TPBot.setWheels(30, -27)
+        basic.pause(300)
+        TPBot.stopCar()
+        basic.pause(700)
+    }
+
+    let wX2 = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) + 10
+    wayX = wX + wX2
+    basic.pause(500)
+    basic.clearScreen()
+}
+
+//SONARS AND OTHER IMPORTANT FUNCTIONS
 
 //checking sonar and if it is balls
 let n: number = 0
@@ -64,7 +130,10 @@ function sonarBalls(): void {
             // If obstacle detected, perform avoidance maneuver
             TPBot.setWheels(-40, -37)
             basic.pause(500)
+            TPBot.stopCar()
             TPBot.setWheels(40, -37)
+            basic.pause(500)
+            TPBot.stopCar()
         }
     }
 }
@@ -341,14 +410,43 @@ function findCards(): string {
     return statusCard
 }
 
-// MAIN FUNCTION
+// MAIN FUNCTIONS
+
+/*1 - Sorting only one ball*/
+
+function sortingOneBall(): void {
+    sonarBalls()
+    if (firstObserve) { // Sorting between blue and red balls
+        while (findBalls() === "N") {
+            findBalls()
+        }
+        basic.showString(findBalls())
+        colorBall.push(findBalls())
+
+        catching()
+        basic.pause(1500)
+    }
+    if (lockForCardsToGo) {
+        TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 120)
+        PlanetX_AILens.switchfunc(PlanetX_AILens.FuncList.Color)
+        sonarCards(wayY, wayX)
+        presetMode()
+        TPBot.setWheels(40, -37)
+        let milisSong: number = control.millis()
+        while ((control.millis() - milisSong) < 32000) {
+            endSong()
+        }
+    }
+}
+
+/*2 - Sorting two balls*/
 
 // Array to store detected ball colors
 let colorBall: Array<string> = []
 
-// Main driving function controlling robot actions
-function driving(): void {
+function sortingBalls(): void {
     while (allCountBall < 2) {
+        lockForCardsToGo = false
         sonarBalls()
         if (firstObserve) { // Sorting between blue and red balls
             while (findBalls() === "N") {
@@ -365,11 +463,8 @@ function driving(): void {
             PlanetX_AILens.switchfunc(PlanetX_AILens.FuncList.Color)
             sonarCards(wayY, wayX)
             presetMode()
-            checkEnd = false
-            firstObserve = false
-            isPlaced = false
-            yCheck = true
-            xCheck = false
+            //just clearer veriables to negation
+            simpleVariables()
             if (allCountBall === 2) {
                 TPBot.setWheels(40, -37)
                 let milisSong: number = control.millis()
@@ -382,5 +477,84 @@ function driving(): void {
     }
 }
 
+/*3 - Finding ball*/
 
-            
+function findingBall(): void {
+    presetMode()
+    sonarBalls()
+    if (firstObserve) { // Sorting between blue and red balls
+        while (findBalls() === "N") {
+            findBalls()
+        }
+        basic.showString(findBalls())
+        colorBall.push(findBalls())
+
+        catching()
+        basic.pause(1500)
+        TPBot.setWheels(40, -37)
+        let milisSong: number = control.millis()
+        while ((control.millis() - milisSong) < 32000) {
+            endSong()
+        }
+    }
+}
+
+/*4 - Sonar car*/
+
+function sonarCar(): void {
+    basic.showIcon(IconNames.Surprised)
+    let milisCar: number = control.millis()
+    while ((control.millis() - milisCar) < 30000) {
+        if (TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) >= 20) TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 30)
+        else if (TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) < 20) {
+            // If obstacle detected, perform avoidance maneuver
+            TPBot.setWheels(-40, -37)
+            basic.pause(500)
+            TPBot.stopCar()
+            TPBot.setWheels(40, -37)
+            basic.pause(500)
+            TPBot.stopCar()
+        }
+    }
+}
+
+/*5 - Scanning map*/
+
+function scanningMapUpgrade(): void {
+    // Scanning map and setting initial coordinates
+    basic.showIcon(IconNames.Happy)
+    wayY = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) + 10
+    TPBot.stopCar()
+    basic.pause(500)
+    TPBot.setTravelTime(TPBot.DriveDirection.Forward, 40, 2)
+    TPBot.stopCar()
+    basic.pause(500)
+
+    // Rotating to find the X-axis coordinate
+    for (let i = 0; i < 4; i++) {
+        TPBot.setWheels(30, -27)
+        basic.pause(300)
+        TPBot.stopCar()
+        basic.pause(700)
+    }
+
+    let wX = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200)
+    basic.pause(1000)
+
+    // Further rotating to refine the X-axis coordinate
+    for (let i = 0; i < 7; i++) {
+        TPBot.setWheels(30, -27)
+        basic.pause(300)
+        TPBot.stopCar()
+        basic.pause(700)
+    }
+
+    let wX2 = TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) + 10
+    wayX = wX + wX2
+    basic.pause(500)
+    basic.clearScreen()
+    TPBot.stopCar()
+    basic.showString("y: " + wayY)
+    basic.pause(1000)
+    basic.showString("x: " + wayX)
+}

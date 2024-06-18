@@ -557,4 +557,8 @@ function scanningMapUpgrade(): void {
     basic.showString("y: " + wayY)
     basic.pause(1000)
     basic.showString("x: " + wayX)
+    basic.pause(1000)
+    basic.showString("o: " + 2*(wayY + wayX))
+    basic.pause(1000)
+    basic.showString("S: " + (wayY * wayX))
 }

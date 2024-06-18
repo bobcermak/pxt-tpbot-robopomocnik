@@ -37,7 +37,7 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     basic.clearScreen()
     block = false
     if (logoStart === 1) startSong2()
-    if (logoStart === 2) {
+    else if (logoStart === 2) {
         startSong() // Start playing initial song
         if (menuCount === 1 || menuCount === 2) {
             scanningMap()
@@ -51,13 +51,22 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
 
 //menu count++
 input.onButtonPressed(Button.A, function() {
-    if (!block && menuCount !== 1) menuCount--
-    music.play(music.tonePlayable(784, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+    if (!block && menuCount !== 1) {
+        menuCount--
+        control.inBackground(function () {
+            music.play(music.tonePlayable(784, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+        })
+    } 
+    
 })
 
 input.onButtonPressed(Button.B, function () {
-    if (!block && menuCount !== 5) menuCount++
-    music.play(music.tonePlayable(880, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+    if (!block && menuCount !== 5) {
+        menuCount++
+        control.inBackground(function () {
+            music.play(music.tonePlayable(880, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
+        })
+    }
 })
 
 //only menu count

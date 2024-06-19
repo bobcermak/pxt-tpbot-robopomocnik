@@ -32,12 +32,12 @@ let menuCount: number = 1
 let logoStart: number = 0
 
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
-    logoStart++
-    basic.pause(200)
-    basic.clearScreen()
     block = false
-    if (logoStart === 1) startSong2()
-    else if (logoStart === 2) {
+    logoStart++
+    basic.clearScreen()
+    basic.pause(500)
+    
+    if (logoStart === 2) {
         startSong() // Start playing initial song
         if (menuCount === 1 || menuCount === 2) {
             scanningMap()

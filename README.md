@@ -1,7 +1,6 @@
 # TPBot + AI Lens + BBC micro:bit
 
 Video with demonstration of robot behaviour at [Youtube](https://www.youtube.com/watch?v=cEjl44lHPP4)
-
 This repository can be added as an **extension** in MakeCode.
 
 ## Game modes

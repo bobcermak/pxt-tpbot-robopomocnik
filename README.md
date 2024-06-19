@@ -1,5 +1,4 @@
-
-> Open this page at [https://bobcermak.github.io/pxt-tpbot-robopomocnik](https://bobcermak.github.io/pxt-tpbot-robopomocnik)
+## TPBot + AI Lens + BBC micro:bit
 
 ## Use as Extension
 

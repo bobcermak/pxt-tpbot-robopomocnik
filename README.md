@@ -12,19 +12,19 @@ This repository can be added as an **extension** in MakeCode.
 * as soon as the ball is caught, the robot aligns itself to the center
 * then a colored card is added to it
 
-# 2 - Sorting two balls
+### 2 - Sorting two balls
 
 * the same as 1 but with two balls
 
-# 3 - Finding ball
+### 3 - Finding ball
 
 * the robot is only looking for ball
 
-# 4 - Sonar car
+### 4 - Sonar car
 
 * robot does not break into walls
 
-# 5 - Scanning map
+### 5 - Scanning map
 
 * measure distances, side lengths, perimeter and content
 

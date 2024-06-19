@@ -4,6 +4,8 @@ Video with demonstration of robot behaviour at [Youtube](https://makecode.microb
 
 This repository can be added as an **extension** in MakeCode.
 
+## Edit this project
+
 * open [https://makecode.microbit.org/](https://makecode.microbit.org/)
 * click on **New Project**
 * click on **Extensions** under the gearwheel menu

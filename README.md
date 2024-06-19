@@ -28,7 +28,6 @@ This repository can be added as an **extension** in MakeCode.
 
 * measure distances, side lengths, perimeter and content
 
-
 ## Edit this project
 
 To edit this repository in MakeCode.

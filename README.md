@@ -1,4 +1,4 @@
-## TPBot + AI Lens + BBC micro:bit
+# TPBot + AI Lens + BBC micro:bit
 
 Video with demonstration of robot behaviour at [Youtube](https://makecode.microbit.org/)
 
@@ -6,7 +6,7 @@ This repository can be added as an **extension** in MakeCode.
 
 ## Game modes
 
-# 1 - Sorting only one ball
+### 1 - Sorting only one ball
 
 * finding ball
 * as soon as the ball is caught, the robot aligns itself to the center

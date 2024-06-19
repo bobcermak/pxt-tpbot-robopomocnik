@@ -13,14 +13,16 @@ basic.forever(function () {
         . . # . .
         `)
         basic.pause(300)
-        basic.showLeds(`
-        . . # . .
-        . # # # .
-        # . # . #
-        . . # . .
-        . . # . .
-        `)
-        basic.pause(700)
+        if (block) {
+            basic.showLeds(`
+            . . # . .
+            . # # # .
+            # . # . #
+            . . # . .
+            . . # . .
+            `)
+            basic.pause(700)
+        }
     }
 })
 
@@ -36,7 +38,7 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     logoStart++
     basic.clearScreen()
     basic.pause(500)
-    
+
     if (logoStart === 2) {
         startSong() // Start playing initial song
         if (menuCount === 1 || menuCount === 2) {
@@ -50,14 +52,13 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
 })
 
 //menu count++
-input.onButtonPressed(Button.A, function() {
+input.onButtonPressed(Button.A, function () {
     if (!block && menuCount !== 1) {
         menuCount--
         control.inBackground(function () {
             music.play(music.tonePlayable(784, music.beat(BeatFraction.Quarter)), music.PlaybackMode.UntilDone)
         })
-    } 
-    
+    }
 })
 
 input.onButtonPressed(Button.B, function () {
@@ -70,9 +71,8 @@ input.onButtonPressed(Button.B, function () {
 })
 
 //only menu count
-basic.forever(function() {
+basic.forever(function () {
     if (!block && logoStart < 2) {
         basic.showNumber(menuCount)
     }
 })
-

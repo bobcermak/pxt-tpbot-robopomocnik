@@ -1,6 +1,6 @@
-### TPBot + AI Lens + BBC micro:bit
+## TPBot + AI Lens + BBC micro:bit
 
-## Use as Extension
+*Video with demonstration of robot behaviour at* 
 
 This repository can be added as an **extension** in MakeCode.
 

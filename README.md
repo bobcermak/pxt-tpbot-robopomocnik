@@ -1,6 +1,6 @@
 ## TPBot + AI Lens + BBC micro:bit
 
-*Video with demonstration of robot behaviour at [Youtube](https://makecode.microbit.org/)
+Video with demonstration of robot behaviour at [Youtube](https://makecode.microbit.org/)
 
 This repository can be added as an **extension** in MakeCode.
 

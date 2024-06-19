@@ -311,7 +311,7 @@ function catching(): void {
 // Checks if the ball is caught
 function checkIfBallCaught(): boolean {
     let countCheck: number = 0
-    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 20)
+    TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S1, 25)
     if (toObserve()) {
         countCheck += 1
         TPBot.setServo(TPBot.ServoTypeList.S360, TPBot.ServoList.S2, 150)
@@ -505,7 +505,7 @@ function sonarCar(): void {
     basic.showIcon(IconNames.Surprised)
     let milisCar: number = control.millis()
     while ((control.millis() - milisCar) < 30000) {
-        if (TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) >= 20) TPBot.setTravelSpeed(TPBot.DriveDirection.Forward, 30)
+        if (TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) >= 20) TPBot.setWheels(40, 37)
         else if (TPBot.sonarReturn(TPBot.SonarUnit.Centimeters, 200) < 20) {
             // If obstacle detected, perform avoidance maneuver
             TPBot.setWheels(-40, -37)
